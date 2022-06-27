@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+
+  wordpress_mariadb:
+    container_name: wordpress_mariadb
+    image: mariadb
+    restart: unless-stopped
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: change_your_password
+    volumes:
+      - './mysql:/var/lib/mysql'
+    networks:
+      - wordpress-network
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    depends_on:
+      - wordpress_mariadb
+    environment:
+      WORDPRESS_DB_HOST: wordpress_mariadb:3306
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: change_your_password
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - './web:/var/www/html'
+    networks:
+      - wordpress-network
+
+networks:
+  wordpress-network:
+    driver: bridge
+
+
