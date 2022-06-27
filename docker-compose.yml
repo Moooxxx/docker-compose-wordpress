@@ -5,6 +5,8 @@ services:
     container_name: wordpress_mariadb
     image: mariadb
     restart: unless-stopped
+    ports:
+      - '3306:3306'
     tty: true
     environment:
       MYSQL_ROOT_PASSWORD: change_your_password
